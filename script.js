@@ -59,12 +59,12 @@ function updateTotals() {
   // Show warning if total exceeds 24 hours
   if (total > 24) {
     warningElement.classList.remove('hidden');
-    totalElement.style.color = '#c33';
-    remainingElement.style.color = '#c33';
+    totalElement.style.color = '#fca5a5';
+    remainingElement.style.color = '#fca5a5';
   } else {
     warningElement.classList.add('hidden');
-    totalElement.style.color = '#667eea';
-    remainingElement.style.color = '#667eea';
+    totalElement.style.color = '#818cf8';
+    remainingElement.style.color = '#818cf8';
   }
 }
 

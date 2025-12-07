@@ -3,93 +3,133 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Life Hours</title>
+  <title>Life Hours - Visualize Your Lifetime</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>Life Hours</h1>
-      <p class="subtitle">Track how you spend your daily hours</p>
+  <nav class="top-nav">
+    <div class="nav-container">
+      <a href="#calculator" class="nav-link">Calculator</a>
+      <a href="#visualization" class="nav-link">Visualization</a>
+      <a href="#insights" class="nav-link">Insights</a>
+      <a href="#about" class="nav-link">About</a>
+    </div>
+  </nav>
+
+  <main class="main-content">
+    <header class="hero-section">
+      <h1 class="main-headline">Visualize Your Lifetime</h1>
+      <p class="hero-subtitle">Discover how your daily choices accumulate over a lifetime. Gain perspective on what truly matters.</p>
     </header>
 
-    <div class="hours-summary">
-      <div class="summary-item">
-        <span class="label">Total Hours Used:</span>
-        <span id="total-hours" class="value">0.00</span>
-      </div>
-      <div class="summary-item">
-        <span class="label">Remaining Hours:</span>
-        <span id="remaining-hours" class="value">24.00</span>
-      </div>
-    </div>
+    <section id="calculator" class="section">
+      <div class="card">
+        <h2 class="section-title">Daily Hours Calculator</h2>
+        
+        <div class="hours-summary">
+          <div class="summary-item">
+            <span class="label">Total Hours Used:</span>
+            <span id="total-hours" class="value">0.00</span>
+          </div>
+          <div class="summary-item">
+            <span class="label">Remaining Hours:</span>
+            <span id="remaining-hours" class="value">24.00</span>
+          </div>
+        </div>
 
-    <div id="warning-message" class="warning hidden">
-      ⚠️ Warning: Total hours exceed 24! Please adjust your values.
-    </div>
+        <div id="warning-message" class="warning hidden">
+          ⚠️ Warning: Total hours exceed 24! Please adjust your values.
+        </div>
 
-    <div class="controls">
-      <div class="slider-group">
-        <label for="sleep-hours">
-          <span class="label-text">Sleep</span>
-          <span id="sleep-value" class="value-display">8.00</span>
-        </label>
-        <input type="range" id="sleep-hours" min="0" max="24" step="0.25" value="8" />
+        <div class="controls">
+          <div class="slider-group">
+            <label for="sleep-hours">
+              <span class="label-text">Sleep</span>
+              <span id="sleep-value" class="value-display">8.00</span>
+            </label>
+            <input type="range" id="sleep-hours" min="0" max="24" step="0.25" value="8" />
+          </div>
+
+          <div class="slider-group">
+            <label for="work-hours">
+              <span class="label-text">Work</span>
+              <span id="work-value" class="value-display">8.00</span>
+            </label>
+            <input type="range" id="work-hours" min="0" max="24" step="0.25" value="8" />
+          </div>
+
+          <div class="slider-group">
+            <label for="commute-hours">
+              <span class="label-text">Commute</span>
+              <span id="commute-value" class="value-display">1.00</span>
+            </label>
+            <input type="range" id="commute-hours" min="0" max="24" step="0.25" value="1" />
+          </div>
+
+          <div class="slider-group">
+            <label for="meals-hours">
+              <span class="label-text">Meals</span>
+              <span id="meals-value" class="value-display">1.50</span>
+            </label>
+            <input type="range" id="meals-hours" min="0" max="24" step="0.25" value="1.5" />
+          </div>
+
+          <div class="slider-group">
+            <label for="freetime-hours">
+              <span class="label-text">Free Time</span>
+              <span id="freetime-value" class="value-display">3.00</span>
+            </label>
+            <input type="range" id="freetime-hours" min="0" max="24" step="0.25" value="3" />
+          </div>
+
+          <div class="slider-group">
+            <label for="other-hours">
+              <span class="label-text">Other</span>
+              <span id="other-value" class="value-display">2.50</span>
+            </label>
+            <input type="range" id="other-hours" min="0" max="24" step="0.25" value="2.5" />
+          </div>
+        </div>
+
+        <div class="actions">
+          <button id="reset-button" class="reset-btn">Reset to Defaults</button>
+        </div>
       </div>
+    </section>
 
-      <div class="slider-group">
-        <label for="work-hours">
-          <span class="label-text">Work</span>
-          <span id="work-value" class="value-display">8.00</span>
-        </label>
-        <input type="range" id="work-hours" min="0" max="24" step="0.25" value="8" />
+    <section id="visualization" class="section">
+      <div class="card">
+        <h2 class="section-title">Lifetime Visualization</h2>
+        <div id="chart-placeholder" class="chart-placeholder">
+          <p>Chart visualization will appear here</p>
+          <p class="chart-note">(Placeholder for future chart implementation)</p>
+        </div>
       </div>
+    </section>
 
-      <div class="slider-group">
-        <label for="commute-hours">
-          <span class="label-text">Commute</span>
-          <span id="commute-value" class="value-display">1.00</span>
-        </label>
-        <input type="range" id="commute-hours" min="0" max="24" step="0.25" value="1" />
+    <section id="insights" class="section">
+      <div class="card">
+        <h2 class="section-title">Life Insights</h2>
+        <p class="insights-text">Insights based on your daily routine will appear here.</p>
       </div>
+    </section>
 
-      <div class="slider-group">
-        <label for="meals-hours">
-          <span class="label-text">Meals</span>
-          <span id="meals-value" class="value-display">1.50</span>
-        </label>
-        <input type="range" id="meals-hours" min="0" max="24" step="0.25" value="1.5" />
+    <section id="about" class="section">
+      <div class="card">
+        <h2 class="section-title">About Life Hours</h2>
+        <p class="about-text">
+          Life Hours is designed to help you visualize how your daily choices accumulate over your lifetime. 
+          By understanding the long-term impact of your routine, you can make more informed decisions about 
+          how you spend your most precious resource - time.
+        </p>
+        <p class="about-text">
+          The calculations are based on averages and assumptions that you can customize. 
+          Remember that life is unpredictable, and these are estimates meant to provide perspective, 
+          not precise predictions.
+        </p>
       </div>
-
-      <div class="slider-group">
-        <label for="freetime-hours">
-          <span class="label-text">Free Time</span>
-          <span id="freetime-value" class="value-display">3.00</span>
-        </label>
-        <input type="range" id="freetime-hours" min="0" max="24" step="0.25" value="3" />
-      </div>
-
-      <div class="slider-group">
-        <label for="other-hours">
-          <span class="label-text">Other</span>
-          <span id="other-value" class="value-display">2.50</span>
-        </label>
-        <input type="range" id="other-hours" min="0" max="24" step="0.25" value="2.5" />
-      </div>
-    </div>
-
-    <div class="actions">
-      <button id="reset-button" class="reset-btn">Reset to Defaults</button>
-    </div>
-
-    <div class="chart-section">
-      <h2>Lifetime Hours per Category</h2>
-      <div id="chart-placeholder" class="chart-placeholder">
-        <p>Chart visualization will appear here</p>
-        <p class="chart-note">(Placeholder for future chart implementation)</p>
-      </div>
-    </div>
-  </div>
+    </section>
+  </main>
 
   <script src="script.js"></script>
 </body>
