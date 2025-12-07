@@ -1,0 +1,25 @@
+Create a Modern Life Time Analysis Web Application
+I want to build a web application that helps people visualize and understand how they spend their time throughout their life. The core concept is to take someone's daily routine and show them the lifetime impact of their choices.
+Key Concept:
+Transform daily time allocation into a lifetime perspective - show how small daily choices add up to years of your life.
+Essential Elements:
+User inputs: age, expected lifespan, daily time breakdown
+Visualizations showing past vs remaining life
+Realistic calculations (don't assume people work from birth!)
+Educational background consideration
+Interactive "what if" scenarios
+Core Question to Answer:
+"If I continue my current daily routine, how will I spend the rest of my life?"
+Technical Requirements:
+Modern, responsive UI
+Real-time calculations
+Interactive charts/visualizations
+Mobile-friendly design
+Be Creative With:
+UI/UX design approach
+Visualization methods
+User interaction patterns
+Additional insights and features
+Modern web technologies
+Please create a unique, engaging web application that helps people gain perspective on their time allocation and life choices. Use your creativity to make it both functional and inspiring!
+
