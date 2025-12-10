@@ -532,7 +532,8 @@
             
             // Update life percentage
             const lifePercentage = (age / lifespan * 100).toFixed(1);
-            document.getElementById('life-percentage').textContent = `${lifePercentage}%`;
+            const lifePercentageText = `${age} of ${lifespan} years (${lifePercentage}%)`;
+            document.getElementById('life-percentage').textContent = lifePercentageText;
             
             // Update timeline visualization
             const timeline = document.getElementById('life-timeline');
@@ -560,12 +561,12 @@
                     datasets: [{
                         data: [age, remainingYears],
                         backgroundColor: [
-                            'rgba(99, 102, 241, 0.8)',
-                            'rgba(79, 70, 229, 0.5)'
+                            'rgba(99, 102, 241, 0.9)',   // Years Lived (indigo-500)
+                            'rgba(165, 180, 252, 0.6)'   // Years Remaining (indigo-300-ish)
                         ],
                         borderColor: [
                             'rgba(99, 102, 241, 1)',
-                            'rgba(79, 70, 229, 1)'
+                            'rgba(165, 180, 252, 1)'
                         ],
                         borderWidth: 1
                     }]
@@ -596,7 +597,7 @@
                                 const data = context.chart.data.datasets[0].data;
                                 const total = data.reduce((sum, v) => sum + v, 0);
                                 const percentage = total > 0 ? (value / total) * 100 : 0;
-                                return percentage.toFixed(1) + '%';
+                                return `${percentage.toFixed(1)}% (${value} yrs)`;
                             }
                         }
                     }
@@ -661,7 +662,7 @@
                                 const data = context.chart.data.datasets[0].data;
                                 const total = data.reduce((sum, v) => sum + v, 0);
                                 const percentage = total > 0 ? (value / total) * 100 : 0;
-                                return percentage.toFixed(1) + '%';
+                                return `${percentage.toFixed(1)}% (${value.toFixed(1)} yrs)`;
                             }
                         }
                     }
