@@ -157,8 +157,19 @@
                     
                     <!-- Work -->
                     <div class="time-block bg-gray-700 p-4 rounded-lg">
+                        <div class="mb-2">
+                            <label class="text-gray-300 text-xs mb-1 block">Primary Role</label>
+                            <select id="primary-role" class="w-full bg-gray-800 text-gray-200 text-sm rounded px-2 py-1 mb-2">
+                                <option value="Work / Job">Work / Job</option>
+                                <option value="School / Study">School / Study</option>
+                                <option value="Parenting / Caregiving">Parenting / Caregiving</option>
+                                <option value="Household Management">Household Management</option>
+                                <option value="Business / Entrepreneurship">Business / Entrepreneurship</option>
+                                <option value="Volunteering / Service">Volunteering / Service</option>
+                            </select>
+                        </div>
                         <div class="flex justify-between items-center mb-2">
-                            <label class="text-gray-300">Work</label>
+                            <label class="text-gray-300">Hours</label>
                             <div class="flex items-center">
                                 <input type="number" id="work-hours-daily" min="0" max="24" value="8" class="w-16 bg-gray-800 text-white text-center rounded py-1">
                                 <span class="ml-1 text-gray-400">hours</span>
@@ -199,8 +210,12 @@
                     
                     <!-- Leisure -->
                     <div class="time-block bg-gray-700 p-4 rounded-lg">
+                        <div class="mb-2">
+                            <label class="text-gray-300 text-xs mb-1 block">Activity Label</label>
+                            <input type="text" id="leisure-label" value="Leisure" class="w-full bg-gray-800 text-gray-200 text-sm rounded px-2 py-1 mb-2" placeholder="e.g., Hobbies, Exercise, Social">
+                        </div>
                         <div class="flex justify-between items-center mb-2">
-                            <label class="text-gray-300">Leisure</label>
+                            <label class="text-gray-300">Hours</label>
                             <div class="flex items-center">
                                 <input type="number" id="leisure-hours" min="0" max="24" value="3" class="w-16 bg-gray-800 text-white text-center rounded py-1">
                                 <span class="ml-1 text-gray-400">hours</span>
@@ -213,8 +228,12 @@
                     
                     <!-- Other -->
                     <div class="time-block bg-gray-700 p-4 rounded-lg">
+                        <div class="mb-2">
+                            <label class="text-gray-300 text-xs mb-1 block">Activity Label</label>
+                            <input type="text" id="other-label" value="Other" class="w-full bg-gray-800 text-gray-200 text-sm rounded px-2 py-1 mb-2" placeholder="e.g., Personal Care, Errands">
+                        </div>
                         <div class="flex justify-between items-center mb-2">
-                            <label class="text-gray-300">Other</label>
+                            <label class="text-gray-300">Hours</label>
                             <div class="flex items-center">
                                 <input type="number" id="other-hours" min="0" max="24" value="2.5" step="0.5" class="w-16 bg-gray-800 text-white text-center rounded py-1">
                                 <span class="ml-1 text-gray-400">hours</span>
@@ -441,6 +460,19 @@
             });
         });
         
+        // Connect primary role dropdown
+        document.getElementById('primary-role').addEventListener('change', () => {
+            calculateLifetime();
+        });
+        
+        // Connect label inputs for leisure and other
+        document.getElementById('leisure-label').addEventListener('input', () => {
+            calculateLifetime();
+        });
+        document.getElementById('other-label').addEventListener('input', () => {
+            calculateLifetime();
+        });
+        
         // Scenario buttons
         document.getElementById('reduce-work').addEventListener('click', () => {
             const workInput = document.getElementById('work-hours-daily');
@@ -510,6 +542,11 @@
             const leisureHours = parseFloat(document.getElementById('leisure-hours').value) || 0;
             const otherHours = parseFloat(document.getElementById('other-hours').value) || 0;
             
+            // Get dynamic labels
+            const primaryRole = document.getElementById('primary-role').value || 'Work / Job';
+            const leisureLabel = document.getElementById('leisure-label').value || 'Leisure';
+            const otherLabel = document.getElementById('other-label').value || 'Other';
+            
             // Calculate remaining years
             const remainingYears = lifespan - age;
             
@@ -523,8 +560,8 @@
             
             // Update insights
             document.getElementById('sleep-insight').textContent = `You will spend approximately ${sleepYears.toFixed(1)} years of your life sleeping.`;
-            document.getElementById('work-insight').textContent = `You will spend approximately ${workYears.toFixed(1)} years of your life working.`;
-            document.getElementById('leisure-insight').textContent = `You will have approximately ${leisureYears.toFixed(1)} years of leisure time.`;
+            document.getElementById('work-insight').textContent = `You will spend approximately ${workYears.toFixed(1)} years of your life ${primaryRole.toLowerCase()}.`;
+            document.getElementById('leisure-insight').textContent = `You will have approximately ${leisureYears.toFixed(1)} years of ${leisureLabel.toLowerCase()} time.`;
             document.getElementById('time-left-insight').textContent = `Based on your inputs, you have approximately ${remainingYears} years left.`;
             
             // Update current age label
@@ -543,10 +580,10 @@
             `;
             
             // Update charts
-            updateCharts(age, lifespan, remainingYears, sleepYears, workYears, mealsYears, commuteYears, leisureYears, otherYears);
+            updateCharts(age, lifespan, remainingYears, sleepYears, workYears, mealsYears, commuteYears, leisureYears, otherYears, primaryRole, leisureLabel, otherLabel);
         }
         
-        function updateCharts(age, lifespan, remainingYears, sleepYears, workYears, mealsYears, commuteYears, leisureYears, otherYears) {
+        function updateCharts(age, lifespan, remainingYears, sleepYears, workYears, mealsYears, commuteYears, leisureYears, otherYears, primaryRole, leisureLabel, otherLabel) {
             // Life Chart (Pie)
             const lifeCtx = document.getElementById('life-chart').getContext('2d');
             
@@ -617,7 +654,7 @@
             timeChart = new Chart(timeCtx, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Sleep', 'Work', 'Meals', 'Commute', 'Leisure', 'Other'],
+                    labels: ['Sleep', primaryRole || 'Work', 'Meals', 'Commute', leisureLabel || 'Leisure', otherLabel || 'Other'],
                     datasets: [{
                         data: [sleepYears, workYears, mealsYears, commuteYears, leisureYears, otherYears],
                         backgroundColor: [
@@ -660,7 +697,7 @@
                             color: '#ffffff',
                             font: {
                                 weight: 'bold',
-                                size: 12
+                                size: 10
                             },
                             align: 'center',
                             anchor: 'center',
@@ -668,7 +705,16 @@
                                 const data = context.chart.data.datasets[0].data;
                                 const total = data.reduce((sum, v) => sum + v, 0);
                                 const percentage = total > 0 ? (value / total) * 100 : 0;
-                                return `${percentage.toFixed(1)}%\n(${value.toFixed(1)} yrs)`;
+                                const percentageRounded = Math.round(percentage);
+                                const yearsRounded = Math.round(value);
+                                
+                                // For percentages < 5%, show on same line to reduce crowding
+                                if (percentage < 5) {
+                                    return `${percentageRounded}% (${yearsRounded} yrs)`;
+                                } else {
+                                    // For percentages ≥ 5%, use stacked layout
+                                    return `${percentageRounded}%\n(${yearsRounded} yrs)`;
+                                }
                             }
                         }
                     }
