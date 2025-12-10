@@ -10,6 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
     <script src="https://unpkg.com/feather-icons"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.waves.min.js"></script>
     <style>
         .custom-scrollbar::-webkit-scrollbar {
@@ -488,6 +489,9 @@
             }
         }
         
+        // Register Chart.js DataLabels plugin
+        Chart.register(ChartDataLabels);
+        
         // Charts
         let lifeChart, timeChart;
         
@@ -582,6 +586,18 @@
                                     return `${context.label}: ${context.raw} years`;
                                 }
                             }
+                        },
+                        datalabels: {
+                            color: '#ffffff',
+                            font: {
+                                weight: 'bold'
+                            },
+                            formatter: (value, context) => {
+                                const data = context.chart.data.datasets[0].data;
+                                const total = data.reduce((sum, v) => sum + v, 0);
+                                const percentage = total > 0 ? (value / total) * 100 : 0;
+                                return percentage.toFixed(1) + '%';
+                            }
                         }
                     }
                 }
@@ -634,6 +650,18 @@
                                 label: function(context) {
                                     return `${context.label}: ${context.raw.toFixed(1)} years`;
                                 }
+                            }
+                        },
+                        datalabels: {
+                            color: '#ffffff',
+                            font: {
+                                weight: 'bold'
+                            },
+                            formatter: (value, context) => {
+                                const data = context.chart.data.datasets[0].data;
+                                const total = data.reduce((sum, v) => sum + v, 0);
+                                const percentage = total > 0 ? (value / total) * 100 : 0;
+                                return percentage.toFixed(1) + '%';
                             }
                         }
                     }
