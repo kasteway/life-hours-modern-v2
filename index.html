@@ -1,136 +1,649 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Life Hours - Visualize Your Lifetime</title>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LifeTime - Visualize Your Life</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.waves.min.js"></script>
+    <style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+        }
+        .time-block {
+            transition: all 0.3s ease;
+        }
+        .time-block:hover {
+            transform: scale(1.03);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .glow-text {
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+    </style>
 </head>
-<body>
-  <nav class="top-nav">
-    <div class="nav-container">
-      <a href="#calculator" class="nav-link">Calculator</a>
-      <a href="#visualization" class="nav-link">Visualization</a>
-      <a href="#insights" class="nav-link">Insights</a>
-      <a href="#about" class="nav-link">About</a>
-    </div>
-  </nav>
-
-  <main class="main-content">
-    <header class="hero-section">
-      <h1 class="main-headline">Visualize Your Lifetime</h1>
-      <p class="hero-subtitle">Discover how your daily choices accumulate over a lifetime. Gain perspective on what truly matters.</p>
+<body class="bg-gray-900 text-white min-h-screen">
+    <div id="vanta-bg" class="fixed inset-0 -z-10 opacity-30"></div>
+    
+    <header class="py-6 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i data-feather="clock" class="text-indigo-400"></i>
+                <h1 class="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-purple-500 bg-clip-text text-transparent">LifeTime</h1>
+            </div>
+            <nav class="hidden md:flex space-x-6">
+                <a href="#calculator" class="hover:text-indigo-300 transition">Calculator</a>
+                <a href="#visualization" class="hover:text-indigo-300 transition">Visualization</a>
+                <a href="#insights" class="hover:text-indigo-300 transition">Insights</a>
+                <a href="#about" class="hover:text-indigo-300 transition">About</a>
+            </nav>
+            <button class="md:hidden" id="mobile-menu-button">
+                <i data-feather="menu"></i>
+            </button>
+        </div>
     </header>
 
-    <section id="calculator" class="section">
-      <div class="card">
-        <h2 class="section-title">Daily Hours Calculator</h2>
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <section class="text-center mb-20" data-aos="fade-up">
+            <h1 class="text-4xl md:text-6xl font-bold mb-6 glow-text">Visualize Your Lifetime</h1>
+            <p class="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto">
+                Discover how your daily choices accumulate over a lifetime. Gain perspective on what truly matters.
+            </p>
+            <div class="mt-10">
+                <a href="#calculator" class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-8 py-3 rounded-full font-medium hover:shadow-lg transition-all duration-300 inline-flex items-center">
+                    Start Now <i data-feather="arrow-right" class="ml-2"></i>
+                </a>
+            </div>
+        </section>
+
+        <section id="calculator" class="mb-20" data-aos="fade-up">
+            <div class="bg-gray-800 rounded-2xl p-6 shadow-xl">
+                <h2 class="text-2xl font-bold mb-6 flex items-center">
+                    <i data-feather="sliders" class="mr-2 text-indigo-400"></i> Life Calculator
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <div class="mb-6">
+                            <label class="block text-gray-300 mb-2">Current Age</label>
+                            <div class="flex items-center">
+                                <input type="range" id="age" min="1" max="100" value="30" class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer">
+                                <span id="age-value" class="ml-4 text-indigo-300 font-medium">30</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label class="block text-gray-300 mb-2">Expected Lifespan</label>
+                            <div class="flex items-center">
+                                <input type="range" id="lifespan" min="50" max="120" value="85" class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer">
+                                <span id="lifespan-value" class="ml-4 text-indigo-300 font-medium">85</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label class="block text-gray-300 mb-2">Education Years</label>
+                            <div class="flex items-center">
+                                <input type="range" id="education" min="0" max="30" value="18" class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer">
+                                <span id="education-value" class="ml-4 text-indigo-300 font-medium">18</span>
+                            </div>
+                            <p class="text-sm text-gray-400 mt-1">Years spent in formal education</p>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div class="mb-6">
+                            <label class="block text-gray-300 mb-2">Retirement Age</label>
+                            <div class="flex items-center">
+                                <input type="range" id="retirement" min="20" max="100" value="65" class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer">
+                                <span id="retirement-value" class="ml-4 text-indigo-300 font-medium">65</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label class="block text-gray-300 mb-2">Work Hours per Day</label>
+                            <div class="flex items-center">
+                                <input type="range" id="work-hours" min="0" max="16" value="8" class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer">
+                                <span id="work-hours-value" class="ml-4 text-indigo-300 font-medium">8</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label class="block text-gray-300 mb-2">Work Days per Week</label>
+                            <div class="flex items-center">
+                                <input type="range" id="work-days" min="0" max="7" value="5" class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer">
+                                <span id="work-days-value" class="ml-4 text-indigo-300 font-medium">5</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="daily-routine" class="mb-20" data-aos="fade-up">
+            <div class="bg-gray-800 rounded-2xl p-6 shadow-xl">
+                <h2 class="text-2xl font-bold mb-6 flex items-center">
+                    <i data-feather="calendar" class="mr-2 text-indigo-400"></i> Daily Routine
+                </h2>
+                <p class="text-gray-300 mb-6">Adjust your typical daily activities (must total 24 hours)</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Sleep -->
+                    <div class="time-block bg-gray-700 p-4 rounded-lg">
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="text-gray-300">Sleep</label>
+                            <div class="flex items-center">
+                                <input type="number" id="sleep-hours" min="0" max="24" value="8" class="w-16 bg-gray-800 text-white text-center rounded py-1">
+                                <span class="ml-1 text-gray-400">hours</span>
+                            </div>
+                        </div>
+                        <div class="w-full bg-gray-600 rounded-full h-2">
+                            <div class="bg-blue-500 h-2 rounded-full" style="width: 33.33%"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Work -->
+                    <div class="time-block bg-gray-700 p-4 rounded-lg">
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="text-gray-300">Work</label>
+                            <div class="flex items-center">
+                                <input type="number" id="work-hours-daily" min="0" max="24" value="8" class="w-16 bg-gray-800 text-white text-center rounded py-1">
+                                <span class="ml-1 text-gray-400">hours</span>
+                            </div>
+                        </div>
+                        <div class="w-full bg-gray-600 rounded-full h-2">
+                            <div class="bg-purple-500 h-2 rounded-full" style="width: 33.33%"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Meals -->
+                    <div class="time-block bg-gray-700 p-4 rounded-lg">
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="text-gray-300">Meals</label>
+                            <div class="flex items-center">
+                                <input type="number" id="meals-hours" min="0" max="24" value="1.5" step="0.5" class="w-16 bg-gray-800 text-white text-center rounded py-1">
+                                <span class="ml-1 text-gray-400">hours</span>
+                            </div>
+                        </div>
+                        <div class="w-full bg-gray-600 rounded-full h-2">
+                            <div class="bg-yellow-500 h-2 rounded-full" style="width: 6.25%"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Commute -->
+                    <div class="time-block bg-gray-700 p-4 rounded-lg">
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="text-gray-300">Commute</label>
+                            <div class="flex items-center">
+                                <input type="number" id="commute-hours" min="0" max="24" value="1" class="w-16 bg-gray-800 text-white text-center rounded py-1">
+                                <span class="ml-1 text-gray-400">hours</span>
+                            </div>
+                        </div>
+                        <div class="w-full bg-gray-600 rounded-full h-2">
+                            <div class="bg-red-500 h-2 rounded-full" style="width: 4.17%"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Leisure -->
+                    <div class="time-block bg-gray-700 p-4 rounded-lg">
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="text-gray-300">Leisure</label>
+                            <div class="flex items-center">
+                                <input type="number" id="leisure-hours" min="0" max="24" value="3" class="w-16 bg-gray-800 text-white text-center rounded py-1">
+                                <span class="ml-1 text-gray-400">hours</span>
+                            </div>
+                        </div>
+                        <div class="w-full bg-gray-600 rounded-full h-2">
+                            <div class="bg-green-500 h-2 rounded-full" style="width: 12.5%"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Other -->
+                    <div class="time-block bg-gray-700 p-4 rounded-lg">
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="text-gray-300">Other</label>
+                            <div class="flex items-center">
+                                <input type="number" id="other-hours" min="0" max="24" value="2.5" step="0.5" class="w-16 bg-gray-800 text-white text-center rounded py-1">
+                                <span class="ml-1 text-gray-400">hours</span>
+                            </div>
+                        </div>
+                        <div class="w-full bg-gray-600 rounded-full h-2">
+                            <div class="bg-pink-500 h-2 rounded-full" style="width: 10.42%"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-6 p-4 bg-gray-700 rounded-lg">
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-300">Total Daily Hours:</span>
+                        <span id="total-hours" class="text-xl font-bold text-indigo-300">24</span>
+                    </div>
+                    <div id="hours-error" class="text-red-400 text-sm mt-2 hidden">Your hours don't add up to 24! Please adjust.</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="visualization" class="mb-20" data-aos="fade-up">
+            <div class="bg-gray-800 rounded-2xl p-6 shadow-xl">
+                <h2 class="text-2xl font-bold mb-6 flex items-center">
+                    <i data-feather="pie-chart" class="mr-2 text-indigo-400"></i> Lifetime Visualization
+                </h2>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4 text-indigo-300">Your Life in Years</h3>
+                        <div class="h-64">
+                            <canvas id="life-chart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4 text-indigo-300">Time Allocation</h3>
+                        <div class="h-64">
+                            <canvas id="time-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-8">
+                    <h3 class="text-xl font-semibold mb-4 text-indigo-300">Life Timeline</h3>
+                    <div class="relative h-32">
+                        <div class="absolute inset-0 bg-gray-700 rounded-full"></div>
+                        <div id="life-timeline" class="absolute inset-0 rounded-full overflow-hidden">
+                            <!-- Filled by JavaScript -->
+                        </div>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <span id="life-percentage" class="text-2xl font-bold text-white">0%</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between mt-2 text-sm text-gray-300">
+                        <span>Birth</span>
+                        <span id="current-age-label">Current Age</span>
+                        <span>Life Expectancy</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="insights" class="mb-20" data-aos="fade-up">
+            <div class="bg-gray-800 rounded-2xl p-6 shadow-xl">
+                <h2 class="text-2xl font-bold mb-6 flex items-center">
+                    <i data-feather="lightbulb" class="mr-2 text-indigo-400"></i> Life Insights
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-gray-700 p-6 rounded-lg">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-indigo-500 rounded-full p-3 mr-4">
+                                <i data-feather="moon" class="text-white"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold">Sleep</h3>
+                        </div>
+                        <p id="sleep-insight" class="text-gray-300">You will spend approximately X years of your life sleeping.</p>
+                    </div>
+                    
+                    <div class="bg-gray-700 p-6 rounded-lg">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-purple-500 rounded-full p-3 mr-4">
+                                <i data-feather="briefcase" class="text-white"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold">Work</h3>
+                        </div>
+                        <p id="work-insight" class="text-gray-300">You will spend approximately X years of your life working.</p>
+                    </div>
+                    
+                    <div class="bg-gray-700 p-6 rounded-lg">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-green-500 rounded-full p-3 mr-4">
+                                <i data-feather="smile" class="text-white"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold">Leisure</h3>
+                        </div>
+                        <p id="leisure-insight" class="text-gray-300">You will have approximately X years of leisure time.</p>
+                    </div>
+                    
+                    <div class="bg-gray-700 p-6 rounded-lg">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-yellow-500 rounded-full p-3 mr-4">
+                                <i data-feather="clock" class="text-white"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold">Time Left</h3>
+                        </div>
+                        <p id="time-left-insight" class="text-gray-300">Based on your inputs, you have approximately X years left.</p>
+                    </div>
+                </div>
+                
+                <div class="mt-8">
+                    <h3 class="text-xl font-semibold mb-4 text-indigo-300">What If Scenarios</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <button id="reduce-work" class="bg-gray-700 hover:bg-gray-600 p-4 rounded-lg transition">
+                            <div class="flex items-center">
+                                <i data-feather="minus-circle" class="text-red-400 mr-2"></i>
+                                <span>Reduce Work by 1 Hour</span>
+                            </div>
+                        </button>
+                        <button id="increase-sleep" class="bg-gray-700 hover:bg-gray-600 p-4 rounded-lg transition">
+                            <div class="flex items-center">
+                                <i data-feather="plus-circle" class="text-blue-400 mr-2"></i>
+                                <span>Increase Sleep by 1 Hour</span>
+                            </div>
+                        </button>
+                        <button id="optimize-commute" class="bg-gray-700 hover:bg-gray-600 p-4 rounded-lg transition">
+                            <div class="flex items-center">
+                                <i data-feather="trending-up" class="text-green-400 mr-2"></i>
+                                <span>Cut Commute in Half</span>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="mb-20" data-aos="fade-up">
+            <div class="bg-gray-800 rounded-2xl p-6 shadow-xl">
+                <h2 class="text-2xl font-bold mb-6 flex items-center">
+                    <i data-feather="info" class="mr-2 text-indigo-400"></i> About LifeTime
+                </h2>
+                <div class="prose prose-invert max-w-none">
+                    <p class="text-gray-300">
+                        LifeTime is designed to help you visualize how your daily choices accumulate over your lifetime. 
+                        By understanding the long-term impact of your routine, you can make more informed decisions about 
+                        how you spend your most precious resource - time.
+                    </p>
+                    <p class="text-gray-300 mt-4">
+                        The calculations are based on averages and assumptions that you can customize. 
+                        Remember that life is unpredictable, and these are estimates meant to provide perspective, 
+                        not precise predictions.
+                    </p>
+                    <p class="text-gray-300 mt-4">
+                        Our goal is to inspire you to reflect on your priorities and consider how you might want to 
+                        adjust your daily habits to align with your values and aspirations.
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 py-8 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center space-x-2 mb-4 md:mb-0">
+                    <i data-feather="clock" class="text-indigo-400"></i>
+                    <span class="text-xl font-bold">LifeTime</span>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white transition">
+                        <i data-feather="github"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition">
+                        <i data-feather="twitter"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition">
+                        <i data-feather="mail"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="mt-6 text-center md:text-left text-gray-400 text-sm">
+                <p>© 2023 LifeTime Visualization Tool. All calculations are estimates.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize animations and icons
+        AOS.init();
+        feather.replace();
         
-        <div class="hours-summary">
-          <div class="summary-item">
-            <span class="label">Total Hours Used:</span>
-            <span id="total-hours" class="value">0.00</span>
-          </div>
-          <div class="summary-item">
-            <span class="label">Remaining Hours:</span>
-            <span id="remaining-hours" class="value">24.00</span>
-          </div>
-        </div>
-
-        <div id="warning-message" class="warning hidden">
-          ⚠️ Warning: Total hours exceed 24! Please adjust your values.
-        </div>
-
-        <div class="controls">
-          <div class="slider-group">
-            <label for="sleep-hours">
-              <span class="label-text">Sleep</span>
-              <span id="sleep-value" class="value-display">8.00</span>
-            </label>
-            <input type="range" id="sleep-hours" min="0" max="24" step="0.25" value="8" />
-          </div>
-
-          <div class="slider-group">
-            <label for="work-hours">
-              <span class="label-text">Work</span>
-              <span id="work-value" class="value-display">8.00</span>
-            </label>
-            <input type="range" id="work-hours" min="0" max="24" step="0.25" value="8" />
-          </div>
-
-          <div class="slider-group">
-            <label for="commute-hours">
-              <span class="label-text">Commute</span>
-              <span id="commute-value" class="value-display">1.00</span>
-            </label>
-            <input type="range" id="commute-hours" min="0" max="24" step="0.25" value="1" />
-          </div>
-
-          <div class="slider-group">
-            <label for="meals-hours">
-              <span class="label-text">Meals</span>
-              <span id="meals-value" class="value-display">1.50</span>
-            </label>
-            <input type="range" id="meals-hours" min="0" max="24" step="0.25" value="1.5" />
-          </div>
-
-          <div class="slider-group">
-            <label for="freetime-hours">
-              <span class="label-text">Free Time</span>
-              <span id="freetime-value" class="value-display">3.00</span>
-            </label>
-            <input type="range" id="freetime-hours" min="0" max="24" step="0.25" value="3" />
-          </div>
-
-          <div class="slider-group">
-            <label for="other-hours">
-              <span class="label-text">Other</span>
-              <span id="other-value" class="value-display">2.50</span>
-            </label>
-            <input type="range" id="other-hours" min="0" max="24" step="0.25" value="2.5" />
-          </div>
-        </div>
-
-        <div class="actions">
-          <button id="reset-button" class="reset-btn">Reset to Defaults</button>
-        </div>
-      </div>
-    </section>
-
-    <section id="visualization" class="section">
-      <div class="card">
-        <h2 class="section-title">Lifetime Visualization</h2>
-        <div id="chart-placeholder" class="chart-placeholder">
-          <p>Chart visualization will appear here</p>
-          <p class="chart-note">(Placeholder for future chart implementation)</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="insights" class="section">
-      <div class="card">
-        <h2 class="section-title">Life Insights</h2>
-        <p class="insights-text">Insights based on your daily routine will appear here.</p>
-      </div>
-    </section>
-
-    <section id="about" class="section">
-      <div class="card">
-        <h2 class="section-title">About Life Hours</h2>
-        <p class="about-text">
-          Life Hours is designed to help you visualize how your daily choices accumulate over your lifetime. 
-          By understanding the long-term impact of your routine, you can make more informed decisions about 
-          how you spend your most precious resource - time.
-        </p>
-        <p class="about-text">
-          The calculations are based on averages and assumptions that you can customize. 
-          Remember that life is unpredictable, and these are estimates meant to provide perspective, 
-          not precise predictions.
-        </p>
-      </div>
-    </section>
-  </main>
-
-  <script src="script.js"></script>
+        // Vanta.js background
+        VANTA.WAVES({
+            el: "#vanta-bg",
+            mouseControls: true,
+            touchControls: true,
+            gyroControls: false,
+            minHeight: 200.00,
+            minWidth: 200.00,
+            scale: 1.00,
+            scaleMobile: 1.00,
+            color: 0x3b3b6e,
+            shininess: 35.00,
+            waveHeight: 15.00,
+            waveSpeed: 0.85,
+            zoom: 0.8
+        });
+        
+        // Connect range inputs to their display values
+        document.querySelectorAll('input[type="range"]').forEach(input => {
+            const valueSpan = document.getElementById(`${input.id}-value`);
+            input.addEventListener('input', () => {
+                valueSpan.textContent = input.value;
+                calculateLifetime();
+            });
+        });
+        
+        // Connect daily routine inputs
+        document.querySelectorAll('#daily-routine input[type="number"]').forEach(input => {
+            input.addEventListener('change', () => {
+                updateTotalHours();
+                calculateLifetime();
+            });
+        });
+        
+        // Scenario buttons
+        document.getElementById('reduce-work').addEventListener('click', () => {
+            const workInput = document.getElementById('work-hours-daily');
+            if (parseFloat(workInput.value) > 0) {
+                workInput.value = (parseFloat(workInput.value) - 1).toFixed(1);
+                updateTotalHours();
+                calculateLifetime();
+            }
+        });
+        
+        document.getElementById('increase-sleep').addEventListener('click', () => {
+            const sleepInput = document.getElementById('sleep-hours');
+            sleepInput.value = (parseFloat(sleepInput.value) + 1).toFixed(1);
+            updateTotalHours();
+            calculateLifetime();
+        });
+        
+        document.getElementById('optimize-commute').addEventListener('click', () => {
+            const commuteInput = document.getElementById('commute-hours');
+            commuteInput.value = (parseFloat(commuteInput.value) / 2).toFixed(1);
+            updateTotalHours();
+            calculateLifetime();
+        });
+        
+        // Update total hours and validate
+        function updateTotalHours() {
+            const sleep = parseFloat(document.getElementById('sleep-hours').value) || 0;
+            const work = parseFloat(document.getElementById('work-hours-daily').value) || 0;
+            const meals = parseFloat(document.getElementById('meals-hours').value) || 0;
+            const commute = parseFloat(document.getElementById('commute-hours').value) || 0;
+            const leisure = parseFloat(document.getElementById('leisure-hours').value) || 0;
+            const other = parseFloat(document.getElementById('other-hours').value) || 0;
+            
+            const total = sleep + work + meals + commute + leisure + other;
+            document.getElementById('total-hours').textContent = total.toFixed(1);
+            
+            const errorElement = document.getElementById('hours-error');
+            if (Math.abs(total - 24) > 0.1) {
+                errorElement.classList.remove('hidden');
+                document.getElementById('total-hours').classList.add('text-red-400');
+                document.getElementById('total-hours').classList.remove('text-indigo-300');
+            } else {
+                errorElement.classList.add('hidden');
+                document.getElementById('total-hours').classList.remove('text-red-400');
+                document.getElementById('total-hours').classList.add('text-indigo-300');
+            }
+        }
+        
+        // Charts
+        let lifeChart, timeChart;
+        
+        function calculateLifetime() {
+            const age = parseInt(document.getElementById('age').value);
+            const lifespan = parseInt(document.getElementById('lifespan').value);
+            const education = parseInt(document.getElementById('education').value);
+            const retirement = parseInt(document.getElementById('retirement').value);
+            const workHours = parseInt(document.getElementById('work-hours').value);
+            const workDays = parseInt(document.getElementById('work-days').value);
+            
+            const sleepHours = parseFloat(document.getElementById('sleep-hours').value) || 0;
+            const workDailyHours = parseFloat(document.getElementById('work-hours-daily').value) || 0;
+            const mealsHours = parseFloat(document.getElementById('meals-hours').value) || 0;
+            const commuteHours = parseFloat(document.getElementById('commute-hours').value) || 0;
+            const leisureHours = parseFloat(document.getElementById('leisure-hours').value) || 0;
+            const otherHours = parseFloat(document.getElementById('other-hours').value) || 0;
+            
+            // Calculate remaining years
+            const remainingYears = lifespan - age;
+            
+            // Calculate time spent in various activities (in years)
+            const sleepYears = (sleepHours / 24 * 365 * remainingYears) / 365;
+            const workYears = (workDailyHours / 24 * 365 * (retirement - Math.max(age, education))) / 365;
+            const mealsYears = (mealsHours / 24 * 365 * remainingYears) / 365;
+            const commuteYears = (commuteHours / 24 * 365 * (retirement - Math.max(age, education))) / 365;
+            const leisureYears = (leisureHours / 24 * 365 * remainingYears) / 365;
+            const otherYears = (otherHours / 24 * 365 * remainingYears) / 365;
+            
+            // Update insights
+            document.getElementById('sleep-insight').textContent = `You will spend approximately ${sleepYears.toFixed(1)} years of your life sleeping.`;
+            document.getElementById('work-insight').textContent = `You will spend approximately ${workYears.toFixed(1)} years of your life working.`;
+            document.getElementById('leisure-insight').textContent = `You will have approximately ${leisureYears.toFixed(1)} years of leisure time.`;
+            document.getElementById('time-left-insight').textContent = `Based on your inputs, you have approximately ${remainingYears} years left.`;
+            
+            // Update current age label
+            document.getElementById('current-age-label').textContent = `Age ${age}`;
+            
+            // Update life percentage
+            const lifePercentage = (age / lifespan * 100).toFixed(1);
+            document.getElementById('life-percentage').textContent = `${lifePercentage}%`;
+            
+            // Update timeline visualization
+            const timeline = document.getElementById('life-timeline');
+            timeline.innerHTML = `
+                <div class="absolute left-0 h-full bg-indigo-500" style="width: ${lifePercentage}%"></div>
+                <div class="absolute h-full bg-indigo-300 opacity-50" style="left: ${lifePercentage}%; width: ${100 - lifePercentage}%"></div>
+            `;
+            
+            // Update charts
+            updateCharts(age, lifespan, remainingYears, sleepYears, workYears, mealsYears, commuteYears, leisureYears, otherYears);
+        }
+        
+        function updateCharts(age, lifespan, remainingYears, sleepYears, workYears, mealsYears, commuteYears, leisureYears, otherYears) {
+            // Life Chart (Pie)
+            const lifeCtx = document.getElementById('life-chart').getContext('2d');
+            
+            if (lifeChart) {
+                lifeChart.destroy();
+            }
+            
+            lifeChart = new Chart(lifeCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['Years Lived', 'Years Remaining'],
+                    datasets: [{
+                        data: [age, remainingYears],
+                        backgroundColor: [
+                            'rgba(99, 102, 241, 0.8)',
+                            'rgba(79, 70, 229, 0.5)'
+                        ],
+                        borderColor: [
+                            'rgba(99, 102, 241, 1)',
+                            'rgba(79, 70, 229, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#E5E7EB'
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.label}: ${context.raw} years`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Time Allocation Chart (Doughnut)
+            const timeCtx = document.getElementById('time-chart').getContext('2d');
+            
+            if (timeChart) {
+                timeChart.destroy();
+            }
+            
+            timeChart = new Chart(timeCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Sleep', 'Work', 'Meals', 'Commute', 'Leisure', 'Other'],
+                    datasets: [{
+                        data: [sleepYears, workYears, mealsYears, commuteYears, leisureYears, otherYears],
+                        backgroundColor: [
+                            'rgba(59, 130, 246, 0.8)',
+                            'rgba(139, 92, 246, 0.8)',
+                            'rgba(234, 179, 8, 0.8)',
+                            'rgba(239, 68, 68, 0.8)',
+                            'rgba(34, 197, 94, 0.8)',
+                            'rgba(236, 72, 153, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgba(59, 130, 246, 1)',
+                            'rgba(139, 92, 246, 1)',
+                            'rgba(234, 179, 8, 1)',
+                            'rgba(239, 68, 68, 1)',
+                            'rgba(34, 197, 94, 1)',
+                            'rgba(236, 72, 153, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#E5E7EB'
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.label}: ${context.raw.toFixed(1)} years`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Initial calculation
+        updateTotalHours();
+        calculateLifetime();
+    </script>
 </body>
 </html>

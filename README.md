@@ -1,12 +1,12 @@
 ---
-title: Life Hours Modern V2
-emoji: 🌖
+title: life-hours-app
+emoji: 🐳
 colorFrom: purple
-colorTo: yellow
+colorTo: purple
 sdk: static
 pinned: false
-license: mit
-short_description: Modern Life Hours app with GitHub auto-sync
+tags:
+  - deepsite
 ---
 
 Check out the configuration reference at https://huggingface.co/docs/hub/spaces-config-reference

@@ -22,4 +22,3 @@ User interaction patterns
 Additional insights and features
 Modern web technologies
 Please create a unique, engaging web application that helps people gain perspective on their time allocation and life choices. Use your creativity to make it both functional and inspiring!
-
